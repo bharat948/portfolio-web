@@ -35,11 +35,11 @@ export type Experience = {
 
 // Personal Information
 export const personalInfo = {
-  name: "John Doe",
-  title: "Creative Developer",
-  email: "hello@example.com",
-  location: "San Francisco, CA",
-  bio: "I'm a creative developer with expertise in building beautiful, interactive digital experiences. I specialize in React, TypeScript, and Three.js, bringing designs to life with modern web technologies.",
+  name: "Bharat Patidar",
+  title: "Associate Product Engineer",
+  email: "bharatpatidar002@example.com",
+  location: "Bhubaneswar, Odisha",
+  bio: "I'm a  developer with expertise in building beautiful, interactive digital experiences. I specialize in React, TypeScript, and Three.js, bringing designs to life with modern web technologies.",
   avatar: "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=600",
 };
 
@@ -47,7 +47,7 @@ export const personalInfo = {
 export const socialLinks: SocialLink[] = [
   {
     name: "GitHub",
-    url: "https://github.com/yourusername",
+    url: "https://github.com/bharat948",
     icon: "Github",
   },
   {
