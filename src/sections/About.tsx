@@ -1,160 +1,64 @@
-import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { personalInfo, experiences } from "../config/portfolio";
-import { Calendar, MapPin, Mail } from "lucide-react";
+import React from "react";
+import { personalInfo } from "../config/portfolio";
+import { Mail } from "lucide-react";
 
 const About: React.FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-  
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      },
-    },
-  };
-  
   return (
-    <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section id="about" className="py-20 bg-[#1A1A2E] text-white min-h-screen flex items-center">
       <div className="container mx-auto px-4">
-        <motion.div
-          ref={ref}
-          className="text-center mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold mb-4"
-            variants={itemVariants}
-          >
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
             About Me
-          </motion.h2>
-          <motion.div 
-            className="h-1 w-20 bg-primary mx-auto mb-6"
-            variants={itemVariants}
-          />
-          <motion.p 
-            className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
-            variants={itemVariants}
-          >
-            Get to know more about me, my experience, and what drives my passion for creating amazing digital experiences.
-          </motion.p>
-        </motion.div>
+          </h2>
+          <div className="h-1 w-20 bg-yellow-400 mx-auto mb-6" />
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Profile Image */}
-          <motion.div
-            className="overflow-hidden rounded-lg shadow-lg"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <img
-              src={personalInfo.avatar}
-              alt={personalInfo.name}
-              className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-500"
-            />
-          </motion.div>
-          
-          {/* About Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-2xl font-bold mb-4">Who am I?</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
+        <div className="flex flex-col lg:flex-row gap-6 items-center justify-center max-w-6xl mx-auto">
+          {/* Left Column - Text Content */}
+          <div className="flex-1 space-y-6 text-center lg:text-left max-w-xl">
+            {/* Greeting */}
+            <p className="text-yellow-400 text-lg font-medium">
+              Hello, Welcome
+            </p>
+            
+            {/* Name/Headline */}
+            <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              I'm {personalInfo.name}
+            </h3>
+            
+            {/* Description */}
+            <p className="text-gray-300 text-lg leading-relaxed">
               {personalInfo.bio}
             </p>
             
-            {/* Personal Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              <div className="flex items-center">
-                <Mail size={20} className="text-primary mr-3" />
-                <span>{personalInfo.email}</span>
-              </div>
-              <div className="flex items-center">
-                <MapPin size={20} className="text-primary mr-3" />
-                <span>{personalInfo.location}</span>
-              </div>
-            </div>
-            
-            <a
-              href="#contact"
-              className="inline-block bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
-            >
-              Contact Me
-            </a>
-          </motion.div>
-        </div>
-        
-        {/* Experience */}
-        <motion.div
-          className="mt-20"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-2xl font-bold mb-8 text-center">My Experience</h3>
-          
-          <div className="space-y-8">
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={index}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 relative border-l-4 border-primary ml-4"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
+            {/* Contact Button */}
+            <div className="pt-4">
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
-                <div className="absolute w-4 h-4 bg-primary rounded-full left-[-10px] top-8" />
-                
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
-                  <h4 className="text-xl font-bold">{exp.position}</h4>
-                  <div className="flex items-center text-gray-500 dark:text-gray-400 mt-2 md:mt-0">
-                    <Calendar size={16} className="mr-2" />
-                    <span>{exp.duration}</span>
-                  </div>
-                </div>
-                
-                <h5 className="text-lg font-medium text-primary mb-2">{exp.company}</h5>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{exp.description}</p>
-                
-                {exp.technologies && (
-                  <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="bg-gray-100 dark:bg-gray-700 px-3 py-1 text-sm rounded-full"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            ))}
+                <Mail size={20} />
+                Contact us
+              </a>
+            </div>
           </div>
-        </motion.div>
+
+          {/* Right Column - Portrait Image */}
+          <div className="flex-1 flex justify-center lg:justify-center">
+            <div className="relative">
+              <div className="w-72 h-88 rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src={personalInfo.avatar}
+                  alt={personalInfo.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Decorative accent */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full" />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
