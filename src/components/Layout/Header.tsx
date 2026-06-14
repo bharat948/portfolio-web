@@ -13,7 +13,9 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
   const headerBg = useTransform(
     scrollY,
     [0, 100],
-    ["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.95)"]
+    darkMode 
+      ? ["rgba(0, 0, 0, 0)", "rgba(17, 24, 39, 0.95)"] 
+      : ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.95)"]
   );
   
   const headerBlur = useTransform(
@@ -25,7 +27,9 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
   const headerShadow = useTransform(
     scrollY,
     [0, 100],
-    ["0 0 0 rgba(0, 0, 0, 0)", "0 8px 32px rgba(0, 0, 0, 0.3)"]
+    darkMode
+      ? ["0 0 0 rgba(0, 0, 0, 0)", "0 8px 32px rgba(0, 0, 0, 0.3)"]
+      : ["0 0 0 rgba(0, 0, 0, 0)", "0 8px 32px rgba(0, 0, 0, 0.1)"]
   );
 
   const toggleMobileMenu = () => {
@@ -71,7 +75,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
         backdropFilter: headerBlur,
         WebkitBackdropFilter: headerBlur,
         boxShadow: headerShadow,
-        borderBottom: "1px solid rgba(255, 255, 255, 0.1)"
+        borderBottom: darkMode ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.05)"
       }}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -79,7 +83,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
     >
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <motion.div
-          className="text-2xl font-bold text-white ml-[80px] font-serif"
+          className="text-2xl font-bold text-gray-900 dark:text-white ml-[80px] font-serif"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -93,7 +97,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
             <motion.a
               key={item}
               href={`#${item.toLowerCase()}`}
-              className="font-medium text-white/90 hover:text-white transition-all duration-300 relative group"
+              className="font-medium text-gray-700 dark:text-white/90 hover:text-primary dark:hover:text-white transition-all duration-300 relative group"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -102,7 +106,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
             >
               {item}
               <motion.div
-                className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white/60 group-hover:w-full transition-all duration-300"
+                className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary dark:bg-white/60 group-hover:w-full transition-all duration-300"
                 whileHover={{ width: "100%" }}
               />
             </motion.a>
@@ -131,7 +135,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-white/80 hover:text-primary transition-all duration-300 rounded-full hover:bg-white/10"
+              className="p-2 text-gray-700 dark:text-white/80 hover:text-primary transition-all duration-300 rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 + index * 0.1 }}
@@ -146,7 +150,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
 
         {/* Mobile Menu Button */}
         <motion.button
-          className="md:hidden p-2 menu-button text-white"
+          className="md:hidden p-2 menu-button text-gray-900 dark:text-white"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
           whileHover={{ scale: 1.1 }}
@@ -163,7 +167,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
         {/* Mobile Menu */}
         <motion.div
           className={cn(
-            "fixed inset-0 bg-black/95 backdrop-blur-lg z-50 flex flex-col mobile-menu",
+            "fixed inset-0 bg-white/95 dark:bg-black/95 backdrop-blur-lg z-50 flex flex-col mobile-menu",
             "md:hidden"
           )}
           initial={{ x: "100%" }}
@@ -174,7 +178,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
             <motion.button
               onClick={toggleMobileMenu}
               aria-label="Close menu"
-              className="text-white p-2"
+              className="text-gray-900 dark:text-white p-2"
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -186,7 +190,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="text-2xl font-medium text-white hover:text-primary transition-colors"
+                className="text-2xl font-medium text-gray-900 dark:text-white hover:text-primary transition-colors"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ 
                   opacity: mobileMenuOpen ? 1 : 0, 
@@ -208,7 +212,7 @@ const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ dark
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 text-white hover:text-primary transition-colors rounded-full hover:bg-white/10"
+                  className="p-3 text-gray-900 dark:text-white hover:text-primary transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ 
                     opacity: mobileMenuOpen ? 1 : 0, 
