@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
         >
           Hi, I'm {personalInfo.name.split(" ")[0]}
           <br />
-          <span className="text-gradient">{personalInfo.title}</span>
+          <span className="text-gradient-animated">{personalInfo.title}</span>
         </motion.h1>
 
         <motion.p

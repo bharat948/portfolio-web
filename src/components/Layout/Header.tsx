@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../utils/cn";
 import { personalInfo, socialLinks, navItems } from "../../config/portfolio";
-import { Menu, X, Github, Linkedin, Twitter, Mail, Moon, Sun } from "lucide-react";
+import { navigate } from "../../lib/router";
+import { Menu, X, Github, Linkedin, Twitter, Mail, Moon, Sun, Heart } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   Github,
@@ -102,6 +103,17 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
               </a>
             );
           })}
+          <a
+            href="/play"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/play");
+            }}
+            className="ml-1 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:-translate-y-0.5"
+          >
+            <Heart size={14} className="fill-current" />
+            Play
+          </a>
         </nav>
 
         {/* Right actions */}
@@ -180,6 +192,22 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
                   {item}
                 </motion.a>
               ))}
+
+              <motion.a
+                href="/play"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMobileMenuOpen(false);
+                  navigate("/play");
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-500 to-fuchsia-500 px-6 py-3 font-display text-2xl font-semibold text-white"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 * navItems.length }}
+              >
+                <Heart size={20} className="fill-current" />
+                Play
+              </motion.a>
 
               <div className="mt-8 flex gap-3">
                 {socialLinks.map((link) => {

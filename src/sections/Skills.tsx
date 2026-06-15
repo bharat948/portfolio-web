@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { skills, type Skill } from "../config/portfolio";
+import SectionHeading from "../components/SectionHeading";
 
 const categoryOrder: Skill["category"][] = ["Frontend", "Backend", "Tools", "Design"];
 
@@ -15,19 +16,7 @@ const Skills: React.FC = () => {
   return (
     <section id="skills" className="scroll-mt-20 py-24 sm:py-32">
       <div className="section-shell">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
-            Skills
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            Tools I work with
-          </h2>
-        </motion.div>
+        <SectionHeading eyebrow="Skills" title="Tools I work with" />
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           {grouped.map((group, i) => (

@@ -1,17 +1,68 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useMotionTemplate,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Github, ExternalLink, FolderGit2, Star } from "lucide-react";
 import { projects as fallbackProjects, github, type Project } from "../config/portfolio";
 import { useGitHubProjects } from "../hooks/useGitHubProjects";
+import SectionHeading from "../components/SectionHeading";
 
-const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => (
+const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Pointer position within the card, normalised to 0–1.
+  const px = useMotionValue(0.5);
+  const py = useMotionValue(0.5);
+
+  // Smooth the tilt so it eases toward the cursor instead of snapping.
+  const springCfg = { stiffness: 150, damping: 18 };
+  const rotateX = useSpring(useTransform(py, [0, 1], [6, -6]), springCfg);
+  const rotateY = useSpring(useTransform(px, [0, 1], [-6, 6]), springCfg);
+
+  // Radial spotlight that tracks the cursor.
+  const spotX = useTransform(px, (v) => `${v * 100}%`);
+  const spotY = useTransform(py, (v) => `${v * 100}%`);
+  const spotlight = useMotionTemplate`radial-gradient(240px circle at ${spotX} ${spotY}, rgba(255,255,255,0.14), transparent 60%)`;
+
+  const handleMove = (e: React.MouseEvent) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    px.set((e.clientX - rect.left) / rect.width);
+    py.set((e.clientY - rect.top) / rect.height);
+  };
+
+  const reset = () => {
+    px.set(0.5);
+    py.set(0.5);
+  };
+
+  return (
   <motion.article
-    className="card-surface group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/5 dark:hover:border-white/20"
+    ref={ref}
+    onMouseMove={reduce ? undefined : handleMove}
+    onMouseLeave={reduce ? undefined : reset}
+    style={reduce ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
+    className="card-surface group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-900/5 dark:hover:border-white/20"
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.2 }}
     transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
   >
+    {/* Cursor spotlight */}
+    {!reduce && (
+      <motion.div
+        aria-hidden
+        style={{ background: spotlight }}
+        className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      />
+    )}
+
     {/* Gradient cover */}
     <div className="relative aspect-[16/9] overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-400 via-brand-500 to-fuchsia-500 opacity-90 transition-transform duration-500 group-hover:scale-105" />
@@ -72,7 +123,8 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
       </div>
     </div>
   </motion.article>
-);
+  );
+};
 
 const SkeletonCard: React.FC = () => (
   <div className="card-surface overflow-hidden">
@@ -102,31 +154,25 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="scroll-mt-20 py-24 sm:py-32">
       <div className="section-shell">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
+        <SectionHeading eyebrow="Work" title="Selected projects" />
+        <motion.p
+          className="mt-3 max-w-2xl text-slate-600 dark:text-slate-400"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
-            Work
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            Selected projects
-          </h2>
-          <p className="mt-3 max-w-2xl text-slate-600 dark:text-slate-400">
-            A few things I've built — pulled live from{" "}
-            <a
-              href={`https://github.com/${github.username}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-brand-500 hover:underline"
-            >
-              GitHub
-            </a>
-            .
-          </p>
-        </motion.div>
+          A few things I've built — pulled live from{" "}
+          <a
+            href={`https://github.com/${github.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-brand-500 hover:underline"
+          >
+            GitHub
+          </a>
+          .
+        </motion.p>
 
         {loading ? (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

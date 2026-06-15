@@ -1,24 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { personalInfo, quickFacts } from "../config/portfolio";
+import SectionHeading from "../components/SectionHeading";
 
 const About: React.FC = () => {
   return (
     <section id="about" className="scroll-mt-20 py-24 sm:py-32">
       <div className="section-shell">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
-            About
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            A bit about me
-          </h2>
-        </motion.div>
+        <SectionHeading eyebrow="About" title="A bit about me" />
 
         <div className="mt-10 grid gap-10 lg:grid-cols-5 lg:gap-14">
           <motion.div

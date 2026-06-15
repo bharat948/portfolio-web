@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send, Github, Linkedin, Twitter } from "lucide-react";
 import { personalInfo, socialLinks } from "../config/portfolio";
+import SectionHeading from "../components/SectionHeading";
 
 const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   Github,
@@ -33,23 +34,16 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" className="scroll-mt-20 py-24 sm:py-32">
       <div className="section-shell">
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 24 }}
+        <SectionHeading eyebrow="Contact" title="Let's work together" align="center" />
+        <motion.p
+          className="mx-auto mt-3 max-w-xl text-center text-slate-600 dark:text-slate-400"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
-            Contact
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            Let's work together
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-slate-600 dark:text-slate-400">
-            Have a project in mind or just want to say hi? My inbox is always open.
-          </p>
-        </motion.div>
+          Have a project in mind or just want to say hi? My inbox is always open.
+        </motion.p>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-5">
           {/* Contact info */}
