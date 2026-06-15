@@ -1,126 +1,59 @@
 import React from "react";
-import { motion, useInView } from "framer-motion";
-import { skills } from "../config/portfolio";
-import SkillsCanvas from "../components/3D/SkillsCanvas";
+import { motion } from "framer-motion";
+import { skills, type Skill } from "../config/portfolio";
+
+const categoryOrder: Skill["category"][] = ["Frontend", "Backend", "Tools", "Design"];
 
 const Skills: React.FC = () => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      },
-    },
-  };
-
-  // Group skills by category
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) {
-      acc[skill.category] = [];
-    }
-    acc[skill.category].push(skill);
-    return acc;
-  }, {} as Record<string, typeof skills>);
-
-  const categoryLabels = {
-    frontend: "Frontend Development",
-    backend: "Backend Development",
-    design: "Design & UX",
-    other: "Other Skills",
-  };
+  const grouped = categoryOrder
+    .map((category) => ({
+      category,
+      items: skills.filter((skill) => skill.category === category),
+    }))
+    .filter((group) => group.items.length > 0);
 
   return (
-    <section id="skills" className="py-20 bg-[#1A1A2E] text-white min-h-screen flex items-center">
-      <div className="container mx-auto px-4">
+    <section id="skills" className="scroll-mt-20 py-24 sm:py-32">
+      <div className="section-shell">
         <motion.div
-          ref={ref}
-          className="text-center mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-4"
-            variants={itemVariants}
-          >
-            My Skills
-          </motion.h2>
-          <motion.div
-            className="h-1 w-20 bg-yellow-400 mx-auto mb-6"
-            variants={itemVariants}
-          />
-          <motion.p
-            className="text-lg text-gray-300 max-w-2xl mx-auto"
-            variants={itemVariants}
-          >
-            Technologies and tools I use to bring ideas to life
-          </motion.p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
+            Skills
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Tools I work with
+          </h2>
         </motion.div>
 
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-12 items-center">
-            {/* Left Column - Skills List */}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {grouped.map((group, i) => (
             <motion.div
-              className="flex-1 space-y-8"
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+              key={group.category}
+              className="card-surface p-6"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
             >
-              {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
-                <motion.div key={category} variants={itemVariants}>
-                  <h3 className="text-xl font-semibold mb-4 text-yellow-400 capitalize">
-                    {categoryLabels[category as keyof typeof categoryLabels]}
-                  </h3>
-                  <div className="space-y-3">
-                    {categorySkills.map((skill) => (
-                      <div key={skill.name} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium text-white">{skill.name}</span>
-                          <span className="text-sm text-gray-400">{skill.proficiency}%</span>
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2">
-                          <motion.div
-                            className="bg-yellow-400 h-2 rounded-full"
-                            initial={{ width: 0 }}
-                            animate={isInView ? { width: `${skill.proficiency}%` } : { width: 0 }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Right Column - 3D Skills Visualization */}
-            <motion.div
-              className="flex-1 flex justify-center lg:justify-center"
-              variants={itemVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-            >
-              <div className="w-72 h-88 rounded-3xl overflow-hidden shadow-2xl">
-                <SkillsCanvas />
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                {group.category}
+              </h3>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {group.items.map((skill) => (
+                  <span
+                    key={skill.name}
+                    className="rounded-lg border border-slate-200 bg-white/50 px-3.5 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:border-brand-400/50 dark:hover:text-brand-300"
+                  >
+                    {skill.name}
+                  </span>
+                ))}
               </div>
             </motion.div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

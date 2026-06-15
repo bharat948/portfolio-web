@@ -1,63 +1,60 @@
 import React from "react";
-import { personalInfo } from "../config/portfolio";
-import { Mail } from "lucide-react";
+import { motion } from "framer-motion";
+import { personalInfo, quickFacts } from "../config/portfolio";
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="py-20 bg-[#1A1A2E] text-white min-h-screen flex items-center">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            About Me
+    <section id="about" className="scroll-mt-20 py-24 sm:py-32">
+      <div className="section-shell">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
+            About
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            A bit about me
           </h2>
-          <div className="h-1 w-20 bg-yellow-400 mx-auto mb-6" />
-        </div>
-        
-        <div className="flex flex-col lg:flex-row gap-6 items-center justify-center max-w-6xl mx-auto">
-          {/* Left Column - Text Content */}
-          <div className="flex-1 space-y-6 text-center lg:text-left max-w-xl">
-            {/* Greeting */}
-            <p className="text-yellow-400 text-lg font-medium">
-              Hello, Welcome
-            </p>
-            
-            {/* Name/Headline */}
-            <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              I'm {personalInfo.name}
-            </h3>
-            
-            {/* Description */}
-            <p className="text-gray-300 text-lg leading-relaxed">
+        </motion.div>
+
+        <div className="mt-10 grid gap-10 lg:grid-cols-5 lg:gap-14">
+          <motion.div
+            className="lg:col-span-3"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
               {personalInfo.bio}
             </p>
-            
-            {/* Contact Button */}
-            <div className="pt-4">
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              >
-                <Mail size={20} />
-                Contact us
-              </a>
-            </div>
-          </div>
+            <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+              When I'm not shipping features, I'm usually exploring new tools,
+              refining my craft, and learning how great products are built.
+            </p>
+          </motion.div>
 
-          {/* Right Column - Portrait Image */}
-          <div className="flex-1 flex justify-center lg:justify-center">
-            <div className="relative">
-              <div className="w-72 h-88 rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src={personalInfo.avatar}
-                  alt={personalInfo.name}
-                  className="w-full h-full object-cover"
-                />
+          <motion.dl
+            className="grid grid-cols-2 gap-4 lg:col-span-2"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {quickFacts.map((fact) => (
+              <div key={fact.label} className="card-surface p-5">
+                <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  {fact.label}
+                </dt>
+                <dd className="mt-1.5 font-medium text-slate-800 dark:text-slate-100">
+                  {fact.value}
+                </dd>
               </div>
-              
-              {/* Decorative accent */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full" />
-            </div>
-          </div>
+            ))}
+          </motion.dl>
         </div>
       </div>
     </section>

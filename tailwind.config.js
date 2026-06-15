@@ -5,33 +5,44 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--color-primary, #0066CC)',
-        'primary-dark': 'var(--color-primary-dark, #0A84FF)',
-        secondary: 'var(--color-secondary, #5AC8FA)',
-        'secondary-dark': 'var(--color-secondary-dark, #64D2FF)',
-        accent: 'var(--color-accent, #FF2D55)',
-        'accent-dark': 'var(--color-accent-dark, #FF375F)',
+        // Indigo → violet accent used across the site.
+        brand: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+        },
       },
       fontFamily: {
-        sans: [
-          'ui-sans-serif',
-          'system-ui',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Segoe UI',
-          'Roboto',
-          'Helvetica Neue',
-          'Arial',
-          'sans-serif',
-        ],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Sora', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       animation: {
-        float: 'float 3s ease-in-out infinite',
+        float: 'float 6s ease-in-out infinite',
+        'aurora-1': 'aurora1 18s ease-in-out infinite',
+        'aurora-2': 'aurora2 22s ease-in-out infinite',
+        'fade-up': 'fadeUp 0.6s ease forwards',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-12px)' },
+        },
+        aurora1: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+          '50%': { transform: 'translate(40px, -30px) scale(1.15)' },
+        },
+        aurora2: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1.1)' },
+          '50%': { transform: 'translate(-40px, 30px) scale(0.9)' },
+        },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
     },

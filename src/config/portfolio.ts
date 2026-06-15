@@ -1,169 +1,135 @@
-// This file contains all the configurable content for your portfolio
-// You can edit this file to update your portfolio information
+// ─────────────────────────────────────────────────────────────────────────────
+// Single source of truth for all portfolio content.
+// Edit the values below to update the site — no component changes required.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export type SocialLink = {
   name: string;
   url: string;
-  icon: string;
+  icon: "Github" | "Linkedin" | "Twitter" | "Mail";
 };
 
 export type Skill = {
   name: string;
-  icon?: string;
-  proficiency: number; // 0-100
-  category: "frontend" | "backend" | "design" | "other";
+  category: "Frontend" | "Backend" | "Tools" | "Design";
 };
 
 export type Project = {
   id: string;
   title: string;
   description: string;
-  thumbnail: string;
+  technologies: string[];
   demoUrl?: string;
   sourceUrl?: string;
-  technologies: string[];
   featured?: boolean;
+  stars?: number;
 };
 
-export type Experience = {
-  company: string;
-  position: string;
-  duration: string;
-  description: string;
-  technologies?: string[];
-};
-
-// Personal Information
+// ── Personal information ──────────────────────────────────────────────────────
 export const personalInfo = {
   name: "Bharat Patidar",
+  // Short role shown under the name in the hero.
   title: "Associate Product Engineer",
-  email: "bharatpatidar002@example.com",
+  // One-liner shown as the hero tagline.
+  tagline: "I build clean, fast, and thoughtful web experiences.",
   location: "Bhubaneswar, Odisha",
-  bio: "I'm a  developer with expertise in building beautiful, interactive digital experiences. I specialize in React, TypeScript, and Three.js, bringing designs to life with modern web technologies.",
-  avatar: "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=600",
+  email: "bharatpatidar002@gmail.com",
+  // A couple of sentences for the About section.
+  bio: "I'm a product engineer focused on building polished, accessible web applications. I enjoy turning ideas into reliable products with React, TypeScript, and a strong eye for detail.",
+  // Set to a URL to show a "Download Resume" button, or leave empty to hide it.
+  resumeUrl: "",
+  // Shown as a small availability badge in the hero. Set available: false to hide.
+  availability: { available: true, label: "Available for opportunities" },
 };
 
-// Social Links
+// ── Social links ──────────────────────────────────────────────────────────────
+// Remove any you don't use. `Mail` is added automatically from personalInfo.email.
 export const socialLinks: SocialLink[] = [
-  {
-    name: "GitHub",
-    url: "https://github.com/bharat948",
-    icon: "Github",
-  },
+  { name: "GitHub", url: "https://github.com/bharat948", icon: "Github" },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/yourusername",
+    url: "https://www.linkedin.com/in/bharat-patidar-6909b02b9",
     icon: "Linkedin",
   },
-  {
-    name: "Twitter",
-    url: "https://twitter.com/yourusername",
-    icon: "Twitter",
-  },
-  {
-    name: "Dribbble",
-    url: "https://dribbble.com/yourusername",
-    icon: "Dribbble",
-  },
 ];
 
-// Skills
+// ── GitHub projects ───────────────────────────────────────────────────────────
+// The Projects section pulls live repo details (description, language, links,
+// stars) from the GitHub API. List the repos you want to feature, in display
+// order. Leave `featuredRepos` empty to auto-show your most recently pushed
+// non-fork repos. If the API is unreachable, the static `projects` list below is
+// used as a fallback.
+export const github = {
+  username: "bharat948",
+  featuredRepos: [
+    "trac-r",
+    "car-go-UI",
+    "connect",
+    "multi-user-whiteboard",
+    "Campground-web",
+    "hospital-management-website",
+  ],
+  // Max repos to show when featuredRepos is empty (auto mode).
+  autoLimit: 6,
+};
+
+// ── Quick facts (small grid in the About section) ─────────────────────────────
+export const quickFacts: { label: string; value: string }[] = [
+  { label: "Role", value: "Associate Product Engineer" },
+  { label: "Location", value: "Bhubaneswar, India" },
+  { label: "Focus", value: "Web & Product Engineering" },
+  { label: "Open to", value: "Full-time & freelance" },
+];
+
+// ── Skills ────────────────────────────────────────────────────────────────────
 export const skills: Skill[] = [
-  { name: "React", proficiency: 90, category: "frontend" },
-  { name: "TypeScript", proficiency: 85, category: "frontend" },
-  { name: "Three.js", proficiency: 80, category: "frontend" },
-  { name: "Node.js", proficiency: 75, category: "backend" },
-  { name: "GraphQL", proficiency: 70, category: "backend" },
-  { name: "UI/UX Design", proficiency: 85, category: "design" },
-  { name: "WebGL", proficiency: 75, category: "frontend" },
-  { name: "Next.js", proficiency: 80, category: "frontend" },
-  { name: "Tailwind CSS", proficiency: 90, category: "frontend" },
-  { name: "Docker", proficiency: 65, category: "backend" },
+  { name: "React", category: "Frontend" },
+  { name: "TypeScript", category: "Frontend" },
+  { name: "Next.js", category: "Frontend" },
+  { name: "Tailwind CSS", category: "Frontend" },
+  { name: "JavaScript", category: "Frontend" },
+  { name: "Node.js", category: "Backend" },
+  { name: "REST APIs", category: "Backend" },
+  { name: "PostgreSQL", category: "Backend" },
+  { name: "Git", category: "Tools" },
+  { name: "Docker", category: "Tools" },
+  { name: "Vite", category: "Tools" },
+  { name: "Figma", category: "Design" },
+  { name: "UI/UX", category: "Design" },
 ];
 
-// Projects
+// ── Projects ──────────────────────────────────────────────────────────────────
+// Replace these placeholders with your real work. Delete or add entries freely.
+// Omit demoUrl/sourceUrl to hide the corresponding button. The section shows a
+// friendly empty state if this array is empty.
 export const projects: Project[] = [
   {
-    id: "interactive-globe",
-    title: "Interactive Globe Visualization",
-    description: "An interactive 3D globe visualization showing global data patterns with animated data points and customizable filters.",
-    thumbnail: "https://images.pexels.com/photos/2156881/pexels-photo-2156881.jpeg?auto=compress&cs=tinysrgb&w=600",
-    demoUrl: "https://example.com/projects/globe",
-    sourceUrl: "https://github.com/yourusername/globe",
-    technologies: ["React", "Three.js", "D3.js", "WebGL"],
+    id: "project-one",
+    title: "Project One",
+    description:
+      "A short description of what you built, the problem it solves, and your role. Replace this with a real project.",
+    technologies: ["React", "TypeScript", "Tailwind CSS"],
+    sourceUrl: "https://github.com/bharat948",
     featured: true,
   },
   {
-    id: "portfolio-website",
-    title: "3D Portfolio Website",
-    description: "A personal portfolio website featuring 3D elements, interactive animations, and a responsive design built with React and Three.js.",
-    thumbnail: "https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=600",
-    demoUrl: "https://example.com",
-    sourceUrl: "https://github.com/yourusername/portfolio",
-    technologies: ["React", "TypeScript", "Three.js", "Framer Motion"],
+    id: "project-two",
+    title: "Project Two",
+    description:
+      "Another highlight. Mention impact or interesting technical details. Add a live demo link when available.",
+    technologies: ["Next.js", "Node.js", "PostgreSQL"],
+    sourceUrl: "https://github.com/bharat948",
     featured: true,
   },
   {
-    id: "ar-product-viewer",
-    title: "AR Product Viewer",
-    description: "An augmented reality product viewer that allows users to visualize products in their real environment using WebXR technology.",
-    thumbnail: "https://images.pexels.com/photos/4144294/pexels-photo-4144294.jpeg?auto=compress&cs=tinysrgb&w=600",
-    demoUrl: "https://example.com/projects/ar-viewer",
-    sourceUrl: "https://github.com/yourusername/ar-viewer",
-    technologies: ["React", "Three.js", "WebXR", "GLSL"],
-  },
-  {
-    id: "interactive-music-visualizer",
-    title: "Interactive Music Visualizer",
-    description: "A 3D music visualizer that reacts to audio input with dynamic shapes and colors, creating a unique visual experience for each track.",
-    thumbnail: "https://images.pexels.com/photos/5611966/pexels-photo-5611966.jpeg?auto=compress&cs=tinysrgb&w=600",
-    demoUrl: "https://example.com/projects/music-viz",
-    sourceUrl: "https://github.com/yourusername/music-viz",
-    technologies: ["React", "Three.js", "Web Audio API", "GLSL"],
+    id: "project-three",
+    title: "Project Three",
+    description:
+      "A smaller side project, experiment, or open-source contribution worth showing off.",
+    technologies: ["React", "Vite"],
+    sourceUrl: "https://github.com/bharat948",
   },
 ];
 
-// Experience
-export const experiences: Experience[] = [
-  {
-    company: "Tech Innovations Inc.",
-    position: "Senior Frontend Developer",
-    duration: "2021 - Present",
-    description: "Leading the development of interactive web applications with a focus on performance and user experience. Implementing 3D visualizations and complex UI animations.",
-    technologies: ["React", "TypeScript", "Three.js", "WebGL"],
-  },
-  {
-    company: "Creative Digital Agency",
-    position: "Creative Developer",
-    duration: "2018 - 2021",
-    description: "Developed award-winning websites and digital experiences for clients in various industries. Specialized in creating unique interactive elements and animations.",
-    technologies: ["JavaScript", "GSAP", "Canvas", "Vue.js"],
-  },
-  {
-    company: "Web Solutions Co.",
-    position: "Frontend Developer",
-    duration: "2016 - 2018",
-    description: "Built responsive websites and web applications with a focus on accessibility and cross-browser compatibility. Collaborated with designers to implement pixel-perfect interfaces.",
-    technologies: ["React", "CSS", "JavaScript", "Responsive Design"],
-  },
-];
-
-// Color Theme
-export const colorTheme = {
-  light: {
-    primary: "#0066CC",
-    secondary: "#5AC8FA",
-    accent: "#FF2D55",
-    background: "#FFFFFF",
-    text: "#000000",
-    surface: "#F5F5F7",
-  },
-  dark: {
-    primary: "#0A84FF",
-    secondary: "#64D2FF",
-    accent: "#FF375F",
-    background: "#000000",
-    text: "#FFFFFF",
-    surface: "#1C1C1E",
-  },
-};
+// ── Navigation ────────────────────────────────────────────────────────────────
+export const navItems = ["Home", "About", "Projects", "Skills", "Contact"] as const;

@@ -1,214 +1,174 @@
-import React from "react";
-import { motion, useInView } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, MapPin, Send, Github, Linkedin, Twitter } from "lucide-react";
 import { personalInfo, socialLinks } from "../config/portfolio";
-import { Mail, Calendar, MapPin, Github, Linkedin, Twitter } from "lucide-react";
+
+const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+  Github,
+  Linkedin,
+  Twitter,
+  Mail,
+};
 
 const Contact: React.FC = () => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      },
-    },
-  };
-
+  // No backend required — compose a pre-filled email the visitor can send.
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted");
+    const subject = encodeURIComponent(`Portfolio enquiry from ${form.name || "someone"}`);
+    const body = encodeURIComponent(
+      `${form.message}\n\n— ${form.name}${form.email ? ` (${form.email})` : ""}`
+    );
+    window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
   };
 
+  const inputClasses =
+    "w-full rounded-xl border border-slate-200 bg-white/60 px-4 py-3 text-slate-900 placeholder-slate-400 outline-none transition-colors focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:placeholder-slate-500";
+
   return (
-    <section id="contact" className="py-20 bg-[#1A1A2E] text-white min-h-screen flex items-center">
-      <div className="container mx-auto px-4">
+    <section id="contact" className="scroll-mt-20 py-24 sm:py-32">
+      <div className="section-shell">
         <motion.div
-          ref={ref}
-          className="text-center mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          className="text-center"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-4"
-            variants={itemVariants}
-          >
-            Get In Touch
-          </motion.h2>
-          <motion.div
-            className="h-1 w-20 bg-yellow-400 mx-auto mb-6"
-            variants={itemVariants}
-          />
-          <motion.p
-            className="text-lg text-gray-300 max-w-2xl mx-auto"
-            variants={itemVariants}
-          >
-            Let's work together to bring your ideas to life
-          </motion.p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
+            Contact
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            Let's work together
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-slate-600 dark:text-slate-400">
+            Have a project in mind or just want to say hi? My inbox is always open.
+          </p>
         </motion.div>
 
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
-            {/* Left Column - Contact Form */}
-            <motion.div
-              className="flex-1 space-y-6"
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+        <div className="mt-12 grid gap-8 lg:grid-cols-5">
+          {/* Contact info */}
+          <motion.div
+            className="space-y-4 lg:col-span-2"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <a
+              href={`mailto:${personalInfo.email}`}
+              className="card-surface flex items-center gap-4 p-5 transition-colors hover:border-brand-300 dark:hover:border-brand-400/40"
             >
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <motion.div variants={itemVariants}>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-white placeholder-gray-400"
-                    placeholder="Your name"
-                  />
-                </motion.div>
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500">
+                <Mail size={20} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  Email
+                </span>
+                <span className="block truncate font-medium">{personalInfo.email}</span>
+              </span>
+            </a>
 
-                <motion.div variants={itemVariants}>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-white placeholder-gray-400"
-                    placeholder="your.email@example.com"
-                  />
-                </motion.div>
+            <div className="card-surface flex items-center gap-4 p-5">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500">
+                <MapPin size={20} />
+              </span>
+              <span>
+                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  Location
+                </span>
+                <span className="block font-medium">{personalInfo.location}</span>
+              </span>
+            </div>
 
-                <motion.div variants={itemVariants}>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-white placeholder-gray-400 resize-none"
-                    placeholder="Tell me about your project..."
-                  />
-                </motion.div>
-
-                <motion.div variants={itemVariants}>
-                  <button
-                    type="submit"
-                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            <div className="flex gap-3 pt-1">
+              {socialLinks.map((link) => {
+                const Icon = iconMap[link.icon];
+                return (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={link.name}
+                    className="card-surface p-3 text-slate-500 transition-colors hover:text-brand-500"
                   >
-                    Send Message
-                  </button>
-                </motion.div>
-              </form>
-            </motion.div>
+                    {Icon && <Icon size={20} />}
+                  </a>
+                );
+              })}
+            </div>
+          </motion.div>
 
-            {/* Right Column - Contact Info */}
-            <motion.div
-              className="flex-1 space-y-8"
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+          {/* Form */}
+          <motion.form
+            onSubmit={handleSubmit}
+            className="card-surface space-y-4 p-6 lg:col-span-3"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your name"
+                  className={inputClasses}
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="you@example.com"
+                  className={inputClasses}
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                required
+                rows={5}
+                placeholder="Tell me about your project..."
+                className={`${inputClasses} resize-none`}
+              />
+            </div>
+            <button
+              type="submit"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-3 font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-slate-900"
             >
-              <motion.div variants={itemVariants}>
-                <h3 className="text-2xl font-bold mb-6 text-yellow-400">
-                  Let's Connect
-                </h3>
-                <p className="text-gray-300 leading-relaxed mb-8">
-                  I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
-                </p>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center">
-                    <Mail className="text-yellow-400" size={20} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Email</p>
-                    <p className="text-gray-300">{personalInfo.email}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center">
-                    <MapPin className="text-yellow-400" size={20} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Location</p>
-                    <p className="text-gray-300">{personalInfo.location}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-yellow-400/20 rounded-lg flex items-center justify-center">
-                    <Calendar className="text-yellow-400" size={20} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Availability</p>
-                    <p className="text-gray-300">Open to new opportunities</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <h4 className="text-lg font-semibold mb-4 text-white">Follow Me</h4>
-                <div className="flex gap-4">
-                  {socialLinks.map((social) => {
-                    let IconComponent;
-                    switch (social.icon) {
-                      case "Github":
-                        IconComponent = Github;
-                        break;
-                      case "Linkedin":
-                        IconComponent = Linkedin;
-                        break;
-                      case "Twitter":
-                        IconComponent = Twitter;
-                        break;
-                      default:
-                        IconComponent = null;
-                    }
-
-                    return (
-                      <a
-                        key={social.name}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 bg-white/10 hover:bg-yellow-400/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20 hover:border-yellow-400/30"
-                      >
-                        {IconComponent && <IconComponent className="text-white hover:text-yellow-400" size={20} />}
-                      </a>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
+              Send message
+              <Send size={18} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </motion.form>
         </div>
       </div>
     </section>

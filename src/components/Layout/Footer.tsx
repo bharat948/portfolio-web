@@ -1,91 +1,80 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { personalInfo, socialLinks } from "../../config/portfolio";
-import { Github, Linkedin, Twitter, Heart } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail, ArrowUp } from "lucide-react";
+import { personalInfo, socialLinks, navItems } from "../../config/portfolio";
+
+const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+  Github,
+  Linkedin,
+  Twitter,
+  Mail,
+};
 
 const Footer: React.FC = () => {
-  // Current year for copyright
   const year = new Date().getFullYear();
 
-  // Render appropriate icon for social link
-  const renderSocialIcon = (iconName: string) => {
-    switch (iconName) {
-      case "Github":
-        return <Github size={20} />;
-      case "Linkedin":
-        return <Linkedin size={20} />;
-      case "Twitter":
-        return <Twitter size={20} />;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 py-12 mt-24">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand Section */}
-          <div>
-            <h3 className="text-2xl font-bold mb-4">
+    <footer className="border-t border-slate-200/70 dark:border-white/10">
+      <div className="section-shell py-12">
+        <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+          <div className="text-center md:text-left">
+            <a href="#home" className="font-display text-xl font-bold tracking-tight">
               {personalInfo.name.split(" ")[0]}
-              <span className="text-primary dark:text-primary-dark">.</span>
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-xs">
-              {personalInfo.bio.split('.')[0]}.
+              <span className="text-gradient">.</span>
+            </a>
+            <p className="mt-2 max-w-xs text-sm text-slate-500 dark:text-slate-400">
+              {personalInfo.tagline}
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item) => (
-                <li key={item}>
-                  <motion.a
-                    href={`#${item.toLowerCase()}`}
-                    className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark transition-colors"
-                    whileHover={{ x: 5 }}
-                  >
-                    {item}
-                  </motion.a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <p className="text-gray-600 dark:text-gray-400 mb-2">{personalInfo.email}</p>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{personalInfo.location}</p>
-            
-            <div className="flex space-x-4 mt-4">
-              {socialLinks.map((link) => (
-                <motion.a
+          <div className="flex gap-2">
+            {socialLinks.map((link) => {
+              const Icon = iconMap[link.icon];
+              return (
+                <a
                   key={link.name}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark transition-colors"
-                  whileHover={{ y: -2, scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
                   aria-label={link.name}
+                  className="rounded-full border border-slate-200 p-2.5 text-slate-500 transition-colors hover:text-slate-900 dark:border-white/10 dark:text-slate-400 dark:hover:text-white"
                 >
-                  {renderSocialIcon(link.icon)}
-                </motion.a>
-              ))}
-            </div>
+                  {Icon && <Icon size={18} />}
+                </a>
+              );
+            })}
+            <a
+              href={`mailto:${personalInfo.email}`}
+              aria-label="Email"
+              className="rounded-full border border-slate-200 p-2.5 text-slate-500 transition-colors hover:text-slate-900 dark:border-white/10 dark:text-slate-400 dark:hover:text-white"
+            >
+              <Mail size={18} />
+            </a>
           </div>
         </div>
 
-        <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200/70 pt-6 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400 sm:flex-row">
+          <p>
             © {year} {personalInfo.name}. All rights reserved.
           </p>
-          <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center mt-4 md:mt-0">
-            Made with <Heart size={16} className="mx-1 text-red-500" /> in React & Three.js
-          </p>
+          <a
+            href="#home"
+            className="inline-flex items-center gap-1.5 font-medium transition-colors hover:text-slate-900 dark:hover:text-white"
+          >
+            Back to top
+            <ArrowUp size={15} />
+          </a>
         </div>
       </div>
     </footer>

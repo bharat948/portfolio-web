@@ -2,68 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html, #root {
-  min-height: 100vh; /* Ensure full height */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchor jumps so the fixed header doesn't cover section titles. */
+    scroll-padding-top: 5rem;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white text-slate-900 dark:bg-[#0a0a12] dark:text-slate-100;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  ::selection {
+    @apply bg-brand-500/30 text-slate-900 dark:text-white;
+  }
+
+  /* Respect users who prefer reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Accent gradient text used for highlighted words and headings. */
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-500 via-brand-400 to-fuchsia-400 bg-clip-text text-transparent;
+  }
+
+  /* Frosted card surface that works in both themes. */
+  .card-surface {
+    @apply rounded-2xl border border-slate-200/80 bg-white/70 backdrop-blur-sm
+           dark:border-white/10 dark:bg-white/[0.03];
+  }
+
+  .section-shell {
+    @apply mx-auto max-w-6xl px-5 sm:px-8;
+  }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #94a3b8;
+  background-clip: padding-box;
 }
-
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: #1f1f1f;
-}
-
 .dark ::-webkit-scrollbar-thumb {
-  background: #666;
+  background: #2a2a3c;
+  background-clip: padding-box;
 }
-
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #888;
-}
-
-@layer components {
-  .section-edge::before,
-  .section-edge::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 100px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .section-edge::before {
-    top: 0;
-    background: linear-gradient(to bottom, rgba(249, 250, 251, 1) 0%, rgba(249, 250, 251, 0) 100%);
-  }
-
-  .section-edge::after {
-    bottom: 0;
-    background: linear-gradient(to top, rgba(249, 250, 251, 1) 0%, rgba(249, 250, 251, 0) 100%);
-  }
-
-  .dark .section-edge::before {
-    background: linear-gradient(to bottom, rgba(17, 24, 39, 1) 0%, rgba(17, 24, 39, 0) 100%);
-  }
-
-  .dark .section-edge::after {
-    background: linear-gradient(to top, rgba(17, 24, 39, 1) 0%, rgba(17, 24, 39, 0) 100%);
-  }
+  background: #3f3f5a;
+  background-clip: padding-box;
 }

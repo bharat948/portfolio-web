@@ -1,235 +1,207 @@
-import React, { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../utils/cn";
-import { appRepo } from "../../config/appRepo";
-import { Menu, X, Github, Linkedin, Twitter, Moon, Sun } from "lucide-react";
+import { personalInfo, socialLinks, navItems } from "../../config/portfolio";
+import { Menu, X, Github, Linkedin, Twitter, Mail, Moon, Sun } from "lucide-react";
 
-const Header: React.FC<{ darkMode: boolean, toggleTheme: () => void }> = ({ darkMode, toggleTheme }) => {
-  const { personalInfo, socialLinks } = appRepo;
+const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+  Github,
+  Linkedin,
+  Twitter,
+  Mail,
+};
+
+interface HeaderProps {
+  darkMode: boolean;
+  toggleTheme: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { scrollY } = useScroll();
-  
-  // Better scroll-based background transitions
-  const headerBg = useTransform(
-    scrollY,
-    [0, 100],
-    darkMode 
-      ? ["rgba(0, 0, 0, 0)", "rgba(17, 24, 39, 0.95)"] 
-      : ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.95)"]
-  );
-  
-  const headerBlur = useTransform(
-    scrollY,
-    [0, 100],
-    ["blur(0px)", "blur(10px)"]
-  );
-  
-  const headerShadow = useTransform(
-    scrollY,
-    [0, 100],
-    darkMode
-      ? ["0 0 0 rgba(0, 0, 0, 0)", "0 8px 32px rgba(0, 0, 0, 0.3)"]
-      : ["0 0 0 rgba(0, 0, 0, 0)", "0 8px 32px rgba(0, 0, 0, 0.1)"]
-  );
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("home");
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  // Close mobile menu when user clicks anywhere outside the menu
+  // Add a frosted background once the page is scrolled.
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (mobileMenuOpen && e.target) {
-        const target = e.target as HTMLElement;
-        if (!target.closest('.mobile-menu') && !target.closest('.menu-button')) {
-          setMobileMenuOpen(false);
-        }
-      }
-    };
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-    document.addEventListener('mousedown', handleOutsideClick);
+  // Highlight the nav item for the section currently in view.
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.getElementById(item.toLowerCase()))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  // Lock body scroll while the mobile menu is open.
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
 
-  // Render appropriate icon for social link
-  const renderSocialIcon = (iconName: string) => {
-    switch (iconName) {
-      case "Github":
-        return <Github size={20} />;
-      case "Linkedin":
-        return <Linkedin size={20} />;
-      case "Twitter":
-        return <Twitter size={20} />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <motion.header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out"
-      style={{
-        backgroundColor: headerBg,
-        backdropFilter: headerBlur,
-        WebkitBackdropFilter: headerBlur,
-        boxShadow: headerShadow,
-        borderBottom: darkMode ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.05)"
-      }}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 90, damping: 18 }}
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        scrolled
+          ? "border-b border-slate-200/70 bg-white/75 backdrop-blur-xl dark:border-white/10 dark:bg-[#0a0a12]/75"
+          : "border-b border-transparent"
+      )}
     >
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <motion.div
-          className="text-2xl font-bold text-gray-900 dark:text-white ml-[80px] font-serif"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.95 }}
-        >
+      <div className="section-shell flex h-16 items-center justify-between">
+        {/* Logo */}
+        <a href="#home" className="font-display text-xl font-bold tracking-tight">
           {personalInfo.name.split(" ")[0]}
-          <span className="text-primary">.</span>
-        </motion.div>
+          <span className="text-gradient">.</span>
+        </a>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8 mr-8">
-          {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item, index) => (
-            <motion.a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="font-medium text-gray-700 dark:text-white/90 hover:text-primary dark:hover:text-white transition-all duration-300 relative group"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -2 }}
-              whileTap={{ y: 0 }}
-            >
-              {item}
-              <motion.div
-                className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary dark:bg-white/60 group-hover:w-full transition-all duration-300"
-                whileHover={{ width: "100%" }}
-              />
-            </motion.a>
-          ))}
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-1 md:flex">
+          {navItems.map((item) => {
+            const id = item.toLowerCase();
+            const isActive = activeSection === id;
+            return (
+              <a
+                key={item}
+                href={`#${id}`}
+                className={cn(
+                  "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  isActive
+                    ? "text-slate-900 dark:text-white"
+                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                )}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="absolute inset-0 -z-10 rounded-full bg-slate-900/[0.06] dark:bg-white/10"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {item}
+              </a>
+            );
+          })}
         </nav>
 
-        {/* Theme Toggle Button (Nav) */}
-        <div className="relative group ml-4">
-          <button
-            className="p-2 rounded-full bg-white dark:bg-gray-800 text-primary dark:text-primary-dark shadow-md focus:outline-none focus:ring-2 focus:ring-primary"
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-          >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-            Theme
-          </span>
-        </div>
-
-        {/* Social Links */}
-        <div className="hidden md:flex space-x-6 mr-8">
-          {socialLinks.slice(0, 3).map((link, index) => (
-            <motion.a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 text-gray-700 dark:text-white/80 hover:text-primary transition-all duration-300 rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 + index * 0.1 }}
-              whileHover={{ y: -2, scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              aria-label={link.name}
-            >
-              {renderSocialIcon(link.icon)}
-            </motion.a>
-          ))}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <motion.button
-          className="md:hidden p-2 menu-button text-gray-900 dark:text-white"
-          onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <motion.div
-            animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </motion.div>
-        </motion.button>
-
-        {/* Mobile Menu */}
-        <motion.div
-          className={cn(
-            "fixed inset-0 bg-white/95 dark:bg-black/95 backdrop-blur-lg z-50 flex flex-col mobile-menu",
-            "md:hidden"
-          )}
-          initial={{ x: "100%" }}
-          animate={{ x: mobileMenuOpen ? 0 : "100%" }}
-          transition={{ type: "spring", damping: 20, stiffness: 100 }}
-        >
-          <div className="flex justify-end p-6">
-            <motion.button
-              onClick={toggleMobileMenu}
-              aria-label="Close menu"
-              className="text-gray-900 dark:text-white p-2"
-              whileHover={{ scale: 1.1, rotate: 90 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <X size={24} />
-            </motion.button>
-          </div>
-          <div className="flex flex-col items-center justify-center flex-1 space-y-8">
-            {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item, index) => (
-              <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-2xl font-medium text-gray-900 dark:text-white hover:text-primary transition-colors"
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ 
-                  opacity: mobileMenuOpen ? 1 : 0, 
-                  x: mobileMenuOpen ? 0 : 50 
-                }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ x: 10, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleMobileMenu}
-              >
-                {item}
-              </motion.a>
-            ))}
-
-            <div className="flex space-x-6 mt-8">
-              {socialLinks.map((link, index) => (
-                <motion.a
+        {/* Right actions */}
+        <div className="flex items-center gap-1.5">
+          <div className="hidden items-center gap-1.5 sm:flex">
+            {socialLinks.map((link) => {
+              const Icon = iconMap[link.icon];
+              return (
+                <a
                   key={link.name}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 text-gray-900 dark:text-white hover:text-primary transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ 
-                    opacity: mobileMenuOpen ? 1 : 0, 
-                    scale: mobileMenuOpen ? 1 : 0 
-                  }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  whileHover={{ y: -2, scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
                   aria-label={link.name}
+                  className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-900/[0.06] hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                 >
-                  {renderSocialIcon(link.icon)}
+                  {Icon && <Icon size={18} />}
+                </a>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={toggleTheme}
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-900/[0.06] hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+          >
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Open menu"
+            className="rounded-full p-2 text-slate-700 hover:bg-slate-900/[0.06] dark:text-slate-200 dark:hover:bg-white/10 md:hidden"
+          >
+            <Menu size={22} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 flex flex-col bg-white/95 backdrop-blur-xl dark:bg-[#0a0a12]/95 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="section-shell flex h-16 items-center justify-between">
+              <span className="font-display text-xl font-bold">
+                {personalInfo.name.split(" ")[0]}
+                <span className="text-gradient">.</span>
+              </span>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+                className="rounded-full p-2 text-slate-700 hover:bg-slate-900/[0.06] dark:text-slate-200 dark:hover:bg-white/10"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <nav className="flex flex-1 flex-col items-center justify-center gap-2">
+              {navItems.map((item, i) => (
+                <motion.a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-display text-3xl font-semibold text-slate-800 transition-colors hover:text-gradient dark:text-slate-100"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 * i }}
+                >
+                  {item}
                 </motion.a>
               ))}
-            </div>
-          </div>
-        </motion.div>
-      </div>
+
+              <div className="mt-8 flex gap-3">
+                {socialLinks.map((link) => {
+                  const Icon = iconMap[link.icon];
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={link.name}
+                      className="rounded-full border border-slate-200 p-3 text-slate-600 transition-colors hover:text-slate-900 dark:border-white/10 dark:text-slate-300 dark:hover:text-white"
+                    >
+                      {Icon && <Icon size={20} />}
+                    </a>
+                  );
+                })}
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 };
