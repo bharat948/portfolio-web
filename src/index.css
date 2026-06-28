@@ -16,6 +16,11 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
+  /* Once the preloader is done, reset the inline background from index.html. */
+  body.preloader-done {
+    background: initial;
+  }
+
   ::selection {
     @apply bg-brand-500/30 text-slate-900 dark:text-white;
   }
@@ -91,4 +96,16 @@
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #3f3f5a;
   background-clip: padding-box;
+}
+
+/* ─── R3F Canvas ─────────────────────────────────────────────── */
+.hero-canvas-wrapper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.8s ease;
+}
+.hero-canvas-wrapper--hidden {
+  opacity: 0;
 }

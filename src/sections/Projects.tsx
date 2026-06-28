@@ -8,8 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Github, ExternalLink, FolderGit2, Star } from "lucide-react";
-import { projects as fallbackProjects, github, type Project } from "../config/portfolio";
-import { useGitHubProjects } from "../hooks/useGitHubProjects";
+import { projects, type Project } from "../config/portfolio";
 import SectionHeading from "../components/SectionHeading";
 
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
@@ -48,10 +47,10 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
     onMouseMove={reduce ? undefined : handleMove}
     onMouseLeave={reduce ? undefined : reset}
     style={reduce ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
-    className="card-surface group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-900/5 dark:hover:border-white/20"
+    className="group relative flex flex-col overflow-hidden rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl transition-all duration-500 hover:border-[#EA580C]/40 hover:shadow-[0_0_30px_rgba(234,88,12,0.1)]"
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
+    viewport={{ once: false, amount: 0.2 }}
     transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
   >
     {/* Cursor spotlight */}
@@ -59,37 +58,43 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
       <motion.div
         aria-hidden
         style={{ background: spotlight }}
-        className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 mix-blend-overlay"
       />
     )}
 
-    {/* Gradient cover */}
-    <div className="relative aspect-[16/9] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-400 via-brand-500 to-fuchsia-500 opacity-90 transition-transform duration-500 group-hover:scale-105" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)]" />
-      <FolderGit2 className="absolute bottom-4 left-4 text-white/90" size={28} />
+    {/* Technical Abstract Header instead of purple gradient */}
+    <div className="relative h-48 overflow-hidden bg-[#050505] border-b border-white/5">
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
+      
+      {/* Glowing orb accent */}
+      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#EA580C] opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-30" />
+      
+      <FolderGit2 className="absolute bottom-6 left-6 text-white/20 transition-colors duration-500 group-hover:text-[#EA580C]" size={32} />
+      
       {typeof project.stars === "number" && project.stars > 0 && (
-        <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-800">
-          <Star size={12} className="fill-current" />
+        <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 text-xs font-semibold text-white">
+          <Star size={12} className="fill-[#EA580C] text-[#EA580C]" />
           {project.stars}
         </span>
       )}
     </div>
 
-    <div className="flex flex-1 flex-col p-6">
-      <h3 className="break-words font-display text-xl font-bold tracking-tight">
+    <div className="flex flex-1 flex-col p-8">
+      <h3 className="break-words font-display text-2xl font-bold tracking-tight text-white group-hover:text-[#EA580C] transition-colors">
         {project.title}
       </h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <p className="mt-3 flex-1 text-sm leading-relaxed text-white/60 font-light">
         {project.description}
       </p>
 
       {project.technologies.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-6 flex flex-wrap gap-2">
           {project.technologies.map((tech) => (
             <span
               key={tech}
-              className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-white/10 dark:text-slate-300"
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 tracking-wide"
             >
               {tech}
             </span>
@@ -97,13 +102,13 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
         </div>
       )}
 
-      <div className="mt-5 flex items-center gap-4 border-t border-slate-100 pt-4 text-sm font-semibold dark:border-white/5">
+      <div className="mt-8 flex items-center gap-6 border-t border-white/10 pt-6 text-sm font-semibold">
         {project.demoUrl && (
           <a
             href={project.demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-slate-700 transition-colors hover:text-brand-500 dark:text-slate-200"
+            className="inline-flex items-center gap-2 text-white/60 transition-colors hover:text-[#EA580C]"
           >
             <ExternalLink size={16} />
             Live demo
@@ -114,7 +119,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
             href={project.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-slate-700 transition-colors hover:text-brand-500 dark:text-slate-200"
+            className="inline-flex items-center gap-2 text-white/60 transition-colors hover:text-[#EA580C]"
           >
             <Github size={16} />
             Code
@@ -126,31 +131,9 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   );
 };
 
-const SkeletonCard: React.FC = () => (
-  <div className="card-surface overflow-hidden">
-    <div className="aspect-[16/9] animate-pulse bg-slate-200/70 dark:bg-white/5" />
-    <div className="space-y-3 p-6">
-      <div className="h-5 w-2/3 animate-pulse rounded bg-slate-200/70 dark:bg-white/5" />
-      <div className="h-4 w-full animate-pulse rounded bg-slate-200/70 dark:bg-white/5" />
-      <div className="h-4 w-4/5 animate-pulse rounded bg-slate-200/70 dark:bg-white/5" />
-      <div className="flex gap-2 pt-2">
-        <div className="h-6 w-16 animate-pulse rounded-full bg-slate-200/70 dark:bg-white/5" />
-        <div className="h-6 w-16 animate-pulse rounded-full bg-slate-200/70 dark:bg-white/5" />
-      </div>
-    </div>
-  </div>
-);
+
 
 const Projects: React.FC = () => {
-  const { projects, loading, error } = useGitHubProjects(
-    github.username,
-    github.featuredRepos,
-    github.autoLimit
-  );
-
-  // Use live GitHub data when available; fall back to the static config on error.
-  const displayProjects = error ? fallbackProjects : projects;
-
   return (
     <section id="projects" className="scroll-mt-20 py-24 sm:py-32">
       <div className="section-shell">
@@ -159,32 +142,15 @@ const Projects: React.FC = () => {
           className="mt-3 max-w-2xl text-slate-600 dark:text-slate-400"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
+          viewport={{ once: false, amount: 0.5 }}
           transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          A few things I've built — pulled live from{" "}
-          <a
-            href={`https://github.com/${github.username}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-brand-500 hover:underline"
-          >
-            GitHub
-          </a>
-          .
+          A few things I've built.
         </motion.p>
 
-        {loading ? (
+        {projects.length > 0 ? (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: github.featuredRepos.length || github.autoLimit }).map(
-              (_, i) => (
-                <SkeletonCard key={i} />
-              )
-            )}
-          </div>
-        ) : displayProjects.length > 0 ? (
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {displayProjects.map((project, index) => (
+            {projects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </div>
@@ -199,18 +165,6 @@ const Projects: React.FC = () => {
             </p>
           </div>
         )}
-
-        <div className="mt-10 flex justify-center">
-          <a
-            href={`https://github.com/${github.username}?tab=repositories`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-slate-400 dark:border-white/15 dark:text-slate-200 dark:hover:border-white/30"
-          >
-            <Github size={18} />
-            View all on GitHub
-          </a>
-        </div>
       </div>
     </section>
   );

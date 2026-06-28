@@ -16,10 +16,15 @@ export default {
           600: '#4f46e5',
           700: '#4338ca',
         },
+        // Preloader & hero tokens.
+        preloader: '#E7E5E2',
+        ink: '#1A1A1A',
+        hero: '#0A0A0A',
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
         display: ['Sora', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       animation: {
         float: 'float 6s ease-in-out infinite',

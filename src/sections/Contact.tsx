@@ -39,7 +39,7 @@ const Contact: React.FC = () => {
           className="mx-auto mt-3 max-w-xl text-center text-slate-600 dark:text-slate-400"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
+          viewport={{ once: false, amount: 0.5 }}
           transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
           Have a project in mind or just want to say hi? My inbox is always open.
@@ -51,7 +51,7 @@ const Contact: React.FC = () => {
             className="space-y-4 lg:col-span-2"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <a
@@ -106,7 +106,7 @@ const Contact: React.FC = () => {
             className="card-surface space-y-4 p-6 lg:col-span-3"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="grid gap-4 sm:grid-cols-2">

@@ -3,7 +3,14 @@ import { motion } from "framer-motion";
 import { skills, type Skill } from "../config/portfolio";
 import SectionHeading from "../components/SectionHeading";
 
-const categoryOrder: Skill["category"][] = ["Frontend", "Backend", "Tools", "Design"];
+const categoryOrder: Skill["category"][] = [
+  "AI & ML",
+  "Backend",
+  "Data & Cloud",
+  "Languages",
+  "Frontend",
+  "Tools",
+];
 
 const Skills: React.FC = () => {
   const grouped = categoryOrder
@@ -18,24 +25,24 @@ const Skills: React.FC = () => {
       <div className="section-shell">
         <SectionHeading eyebrow="Skills" title="Tools I work with" />
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {grouped.map((group, i) => (
             <motion.div
               key={group.category}
-              className="card-surface p-6"
+              className="group rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 p-8 shadow-2xl transition-all duration-500 hover:border-[#EA580C]/40 hover:shadow-[0_0_30px_rgba(234,88,12,0.1)]"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+              <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-white/50 group-hover:text-[#EA580C] transition-colors">
                 {group.category}
               </h3>
-              <div className="mt-4 flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-2.5">
                 {group.items.map((skill) => (
                   <span
                     key={skill.name}
-                    className="rounded-lg border border-slate-200 bg-white/50 px-3.5 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:border-brand-400/50 dark:hover:text-brand-300"
+                    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                   >
                     {skill.name}
                   </span>

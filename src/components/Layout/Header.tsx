@@ -12,11 +12,11 @@ const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
 };
 
 interface HeaderProps {
-  darkMode: boolean;
-  toggleTheme: () => void;
+  /** When false the header stays hidden (preloader is still playing). */
+  visible?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
+const Header: React.FC<HeaderProps> = ({ visible = true }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("home");
@@ -55,6 +55,9 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
       document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
+
+  // Don't render until the preloader is done.
+  if (!visible) return null;
 
   return (
     <motion.header
@@ -123,14 +126,6 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleTheme }) => {
               );
             })}
           </div>
-
-          <button
-            onClick={toggleTheme}
-            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-            className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-900/[0.06] hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
-          >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
 
           <button
             onClick={() => setMobileMenuOpen(true)}

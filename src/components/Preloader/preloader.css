@@ -1,0 +1,120 @@
+/* ───────────────────────────────────────────
+   Preloader — TRIONN-inspired overlay
+   ─────────────────────────────────────────── */
+
+/* Root overlay */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E7E5E2;
+  clip-path: inset(0 0 0% 0);
+  will-change: clip-path;
+}
+
+/* Curtain exit — wipes upward */
+.preloader--done {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ── Centered frame ── */
+.preloader__frame {
+  position: relative;
+  width: 205px;
+  height: 205px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Square border */
+.preloader__border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #1A1A1A;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Top-edge progress bar */
+.preloader__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-color: #1A1A1A;
+  width: 0%;
+  transition: width 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── Crosshair marks ── */
+.preloader__mark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 300;
+  color: #1A1A1A;
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Position offsets driven by custom properties */
+  top: var(--mark-top, auto);
+  left: var(--mark-left, auto);
+  right: var(--mark-right, auto);
+  bottom: var(--mark-bottom, auto);
+}
+
+/* Rotated state: + → × */
+.preloader__mark--done {
+  transform: rotate(45deg);
+}
+
+/* ── Logo ── */
+.preloader__logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1;
+  color: #1A1A1A;
+  opacity: 0;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+/* ── Tagline ── */
+.preloader__tagline {
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  font-size: 0.6rem;
+  line-height: 1;
+  color: #1A1A1A;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  margin-top: 10px;
+  opacity: 0;
+  text-align: center;
+}
+
+/* ── Counter ── */
+.preloader__counter {
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #1A1A1A;
+  opacity: 0;
+  letter-spacing: 0.05em;
+}

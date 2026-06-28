@@ -9,41 +9,21 @@ const About: React.FC = () => {
       <div className="section-shell">
         <SectionHeading eyebrow="About" title="A bit about me" />
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-5 lg:gap-14">
+        <div className="mt-10 max-w-md">
           <motion.div
-            className="lg:col-span-3"
+            className="flex flex-col justify-center rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 p-6 sm:p-8 shadow-2xl ring-1 ring-inset ring-white/5"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              {personalInfo.bio}
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              When I'm not shipping features, I'm usually exploring new tools,
-              refining my craft, and learning how great products are built.
+            <h3 className="text-xl sm:text-2xl lg:text-3xl leading-snug font-medium text-white/90">
+              I build <span className="text-[#EA580C]">Agentic</span> and <span className="text-[#EA580C]">AI workflow</span> applications.
+            </h3>
+            <p className="mt-4 text-base text-white/60 font-light">
+              A software developer with deep expertise in crafting intelligent systems and automated workflows.
             </p>
           </motion.div>
-
-          <motion.dl
-            className="grid grid-cols-2 gap-4 lg:col-span-2"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {quickFacts.map((fact) => (
-              <div key={fact.label} className="card-surface p-5">
-                <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  {fact.label}
-                </dt>
-                <dd className="mt-1.5 font-medium text-slate-800 dark:text-slate-100">
-                  {fact.value}
-                </dd>
-              </div>
-            ))}
-          </motion.dl>
         </div>
       </div>
     </section>
